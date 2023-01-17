@@ -1,0 +1,39 @@
+extend type Query {
+  "Get notifications for the logged-in user"
+  notifications(pagination: PaginationInput!): NotificationResponse
+}
+
+type NotificationResponse {
+  data: [Notification!]!
+  pagination: Pagination!
+}
+
+type Notification {
+  _id: ID!
+  "Details of the user who executed the action that resulted to this notification"
+  initiator: NotificationInitiator!
+  "The type of action carried out on the app which resulted to this notification"
+  type: String!
+  "Message of the notification"
+  message: String!
+  "The type of resource associated with the notification. In case the user may carry out an action"
+  resourceType: NotificationResourceType!
+  "Unique id of the resource associated with the notification. In case the user may carry out an action"
+  resourceId: ID!
+  "If true, the user can carry out an action on this notification. For example, (User wants to accept or reject an event invitation directly from the notification tab)"
+  isActionRequired: Boolean!
+  "If an action is required to be taken due to this notification, this field describes the action type. This field will be null if an action is not required for this notification."
+  actionType: String
+  "If an action is/was required to be taken due to this notification, this field indicates if that action has been taken. This field will be null if an action is/was not required for this notification."
+  actionTaken: Boolean
+  "Date the notification was created"
+  createdAt: Date!
+}
+
+type NotificationInitiator {
+  _id: ID!
+  name: String
+  email: String
+  photo: String
+  id: String
+}
