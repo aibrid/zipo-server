@@ -16,7 +16,7 @@ async function getUserInfo(token) {
 
 async function protect(_, __, context) {
   const user = await User.findById(context.user?.id).select(
-    'name email ssoAppleId ssoGoogleId'
+    'name email'
   );
 
   if (!user) {

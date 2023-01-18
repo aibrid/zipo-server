@@ -55,6 +55,11 @@ input PaginationInput {
 }
 
 # Enums
+
+enum LINK_TYPE {
+  Shortened
+  Combined
+}
 enum EVENT_STATUS {
   "Get all events"
   All

@@ -1,0 +1,39 @@
+extend type Query {
+  "Get links - [for logged-in user]"
+  links: [Link]!
+  "Get a link by id - [for logged-in user]"
+  link_getById(id: ID!): Link!
+  "Check if a link is customizable"
+  link_isCustomizable: Boolean!
+  link_click: Click
+}
+
+extend type Mutation {
+  "Shorten a link"
+  link_shorten(alternators: [String!]!, link: String!): LinkResponse!
+  "Shorten a custom link"
+  link_shortenCustom(path: String!, alternators: [String!], link: String! ): LinkResponse!
+}
+
+type Click {
+  count: Int!
+  data: [String]!
+}
+
+type Link {
+  _id: ID!
+  path: String!
+  alternators: [String]
+  type: LINK_TYPE!
+  link: String!
+  id: String
+}
+
+type LinkResponse {
+  code: String!
+  success: Boolean!
+  error: String
+  data: Link!
+}
+
+# Inputs

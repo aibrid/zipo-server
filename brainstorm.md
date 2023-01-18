@@ -1,7 +1,5 @@
-**Pending**
-send event notifications at notifications period
+# link_create
+# link_createCustom
+# link_isCustomizable: true or false
 
-==================================================================
--Settings 10%
--Settings(My Account-pro) 10%
--Settings(My Account) 10%
+=========================================================================================

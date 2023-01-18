@@ -42,12 +42,12 @@ async function startApolloServer() {
     csrfPrevention: true,
     formatError: errorHandler,
     introspection: true,
-    playground: true
+    playground: true,
   });
 
   await server.start();
 
-  let origin = ['https://prod-url.com'];
+  let origin = ['https://apis.zipo.me'];
   if (process.env.TEST_ENV === 'true') {
     origin.push('http://localhost:3000', 'https://studio.apollographql.com');
   }
