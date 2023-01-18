@@ -1,7 +1,7 @@
 {
-  "name": "events-api",
+  "name": "zipo-api",
   "version": "1.0.0",
-  "description": "App for managing events",
+  "description": "Zipo server",
   "main": "server.js",
   "engines": {
     "node": "14.15.0"

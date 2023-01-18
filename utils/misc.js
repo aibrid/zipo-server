@@ -1,5 +1,6 @@
 const { sendEmail, createEmailParam } = require('./mails');
-const Event = require('../models/Event');
+const Event = require('../models/Link');
+const Link = require('../models/Link');
 
 module.exports.randomNumbers = (length) => {
   let code = '';
@@ -45,4 +46,32 @@ module.exports.sendInvitationToEmails = async (
   );
 
   await sendEmail(params);
+};
+
+module.exports.generateLink = async () => {
+  const sample =
+    'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMOPQRSTUVWXYZ'.split('');
+
+  async function createLink() {
+    let link = '';
+
+    while (link.length < 6) {
+      const index = Math.abs(Math.round(Math.random() * sample.length - 1));
+
+      link += sample[index];
+    }
+
+    const pathExist = await Link.findOne({ path: link })
+      .limit(1)
+      .sort({ _id: -1 })
+      .select('path');
+
+    if (pathExist) {
+      return createLink();
+    }
+
+    return link;
+  }
+
+  return await createLink();
 };

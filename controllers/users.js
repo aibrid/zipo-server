@@ -496,10 +496,10 @@ module.exports.sendResetPasswordMail = asyncHandler(async (_, args) => {
 
     await sendEmail(params);
   } catch (error) {
-     return new ErrorResponse(
-       500,
-       'Please check that your email is correct and try again.'
-     );
+    return new ErrorResponse(
+      500,
+      'Please check that your email is correct and try again.'
+    );
   }
   return new SuccessResponse(200, true, null, token);
 });
