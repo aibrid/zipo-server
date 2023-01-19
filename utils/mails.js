@@ -4,7 +4,7 @@ const mainEmail = process.env.AWS_SES_MAIN_SENDING_EMAIL;
 
 const createEmailParam = (from, to, subject, message) => {
   if (!from) {
-    from = `Events <${mainEmail}>`;
+    from = `Zipo <${mainEmail}>`;
   }
 
   return {
@@ -24,7 +24,7 @@ const createEmailParam = (from, to, subject, message) => {
       },
     },
     Source: from,
-    ReplyToAddresses: ['no-reply@evens.io'],
+    ReplyToAddresses: ['no-reply@zipo.me'],
   };
 };
 
