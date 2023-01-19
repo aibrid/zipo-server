@@ -6,7 +6,7 @@ const { getS3SignedUrl } = require('./utils/fileUploads');
 
 const app = express();
 
-let origin = ['https://prod-url.com'];
+let origin = ['https://zipo.me'];
 if (process.env.TEST_ENV === 'true') {
   origin.push('http://localhost:3000', 'https://studio.apollographql.com');
 }
