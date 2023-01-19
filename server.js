@@ -47,7 +47,7 @@ async function startApolloServer() {
 
   await server.start();
 
-  let origin = ['https://apis.zipo.me'];
+  let origin = ['https://zipo.me'];
   if (process.env.TEST_ENV === 'true') {
     origin.push('http://localhost:3000', 'https://studio.apollographql.com');
   }
