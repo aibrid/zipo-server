@@ -24,7 +24,7 @@ app.use(
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send(`Hello bro`);
+  res.send(`Hello man`);
 });
 
 module.exports = app;
