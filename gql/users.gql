@@ -6,58 +6,23 @@ extend type Query {
 }
 
 extend type Mutation {
-  "Register with Email & Password - Step 1"
-  auth_sendVerificationCode(
-    email: String!
-    receiveNewsletter: Boolean!
-  ): DefaultResponse!
-  "Register with Email & Password"
-  auth_resendVerificationCode(token: String!): DefaultResponse!
-  "Register with Email & Password - Step 2"
-  auth_verifyEmail(token: String!, code: String!): DefaultResponse!
-  "Register with Email & Password - Step 3 (Final)"
-  auth_register(token: String!, name: String!, password: String!): UserResponse!
-  "Register using google"
-  auth_registerWithGoogle(
-    name: String
-    email: String
-    ssoGoogleId: String!
-    photo: String
-    receiveNewsletter: Boolean!
-  ): UserResponse!
-  "Register using apple"
-  auth_registerWithApple(
-    name: String
-    email: String
-    ssoAppleId: String!
-    photo: String
-    receiveNewsletter: Boolean!
-  ): UserResponse!
+  auth_verifyEmail(token: String!): UserResponse!
   "Login with email and password"
   auth_login(email: String!, password: String!): UserResponse!
-  "Login using google"
-  auth_loginWithGoogle(
-    name: String
-    email: String
+  "Login with email and password"
+  auth_register(
+    name: String!
+    email: String!
+    password: String!
+    receiveNewsletter: Boolean!
+  ): DefaultResponse!
+  "Authenticate with google"
+  auth_google(
+    name: String!
+    email: String!
     ssoGoogleId: String!
-    photo: String
+    receiveNewsletter: Boolean
   ): UserResponse!
-  "Login using apple"
-  auth_loginWithApple(
-    name: String
-    email: String
-    ssoAppleId: String!
-    photo: String
-  ): UserResponse!
-
-  "Resetting password- step 1"
-  auth_sendResetPasswordMail(email: String!): DefaultResponse!
-  "Resend reset password mail"
-  auth_resendResetPasswordMail(token: String!): DefaultResponse!
-  "Resetting password- step 2"
-  auth_verifyResetPasswordCode(token: String!, code: String!): DefaultResponse!
-  "Resetting password- step 3"
-  auth_resetPassword(token: String!, password: String!): DefaultResponse!
 }
 
 type UserResponse {
@@ -73,11 +38,6 @@ type User {
   _id: ID!
   email: String
   name: String
-  photo: String
-  "Apple account Id of the user. This field will be null if the user never authenticated with Apple"
-  ssoAppleId: String
   "Google account Id of the user. This field will be null if the user never authenticated with Google"
   ssoGoogleId: String
-  "Total new notifications that a user has"
-  newNotifications: Int!
 }

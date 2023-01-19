@@ -19,10 +19,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
 
-  photo: {
-    type: String,
-  },
-
   password: {
     type: String,
     default: null,
@@ -34,43 +30,27 @@ const UserSchema = new mongoose.Schema({
     default: false,
   },
 
-  isSignupCompleted: {
-    type: Boolean,
-    default: false,
-  },
-
   receiveNewsletter: {
     type: Boolean,
     default: false,
   },
 
-  newNotifications: {
-    type: Number,
-    default: 0,
-  },
-
   // For single sign on
-  ssoAppleId: String,
   ssoGoogleId: String,
 
   // For handling registration through email
   verifyEmailToken: String,
   verifyEmailExpire: { type: Date, expires: 600 },
-  verifyEmailCode: String,
 
   // For Handling password reset
   resetPasswordToken: String,
   resetPasswordCode: String,
   resetPasswordExpire: Date,
-  isResetPasswordCodeVerified: {
-    type: Boolean,
-  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
   id: String,
-  role: String,
 });
 
 UserSchema.methods.getSignedJwtToken = function () {
@@ -102,9 +82,8 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-UserSchema.methods.handleEmailVerification = function () {
+UserSchema.methods.generateEmailVerificationToken = function () {
   const token = crypto.randomBytes(20).toString('hex');
-  const code = randomNumbers(5);
 
   // Hash token and set to verifyEmailToken field
   this.verifyEmailToken = crypto
@@ -112,14 +91,10 @@ UserSchema.methods.handleEmailVerification = function () {
     .update(token)
     .digest('hex');
 
-  // Set expiration time for registration session
+  // Set expiration time for registration session as 10 minutes
   this.verifyEmailExpire = Date.now() + 10 * 60 * 1000;
-  this.verifyEmailCode = code;
 
-  return {
-    token,
-    code,
-  };
+  return token;
 };
 
 UserSchema.methods.handleResetPassword = function () {

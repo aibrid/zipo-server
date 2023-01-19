@@ -122,7 +122,7 @@ module.exports.shortenCustomLink = asyncHandler(async (_, args, context) => {
   if (pathTaken) {
     return new ErrorResponse(400, `'${args.path}' is taken`);
   }
-
+  args.type = 'Shortened';
   const link = await Link.create(args);
 
   return new SuccessResponse(201, true, link);

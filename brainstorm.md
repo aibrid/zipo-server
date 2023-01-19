@@ -1,5 +1,2 @@
-# link_create
-# link_createCustom
-# link_isCustomizable: true or false
-
 =========================================================================================
+filter certain character away whilst checking links and shortening customized link
