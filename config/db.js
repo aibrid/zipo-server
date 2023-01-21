@@ -11,7 +11,7 @@ mongoose.connection.on('error', (err) => {
 const options = {};
 
 if (process.env.NODE_ENV === 'production') {
-  options.tlsCAFile = `rds-combined-ca-bundle.pem`;
+  options.tlsCAFile = `./rds-combined-ca-bundle.pem`;
 }
 
 async function connectDB() {
