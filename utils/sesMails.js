@@ -9,7 +9,7 @@ const verificationMail = (token) => `
   <body>
   <p>Please verify your email by clicking the link below. Kindly ignore this email if you did not initiate this request</p>
   <br>
-  <p><a href="https://zipo.me/#/verify-token/${token}">Verify Email</a></p>
+  <p><a href="${process.env.CLIENT_URL}/verify-email/${token}">Verify Email</a></p>
   </body>
 </html>
 `;
