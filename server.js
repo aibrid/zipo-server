@@ -49,7 +49,11 @@ async function startApolloServer() {
 
   let origin = ['https://zipo.me'];
   if (process.env.TEST_ENV === 'true') {
-    origin.push('http://localhost:3000', 'https://studio.apollographql.com');
+    origin.push(
+      'http://localhost:3000',
+      'http://localhost:5000',
+      'https://studio.apollographql.com'
+    );
   }
 
   const corsOption = {

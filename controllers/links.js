@@ -7,7 +7,18 @@ const User = require('../models/User');
 const { generateLink } = require('../utils/misc');
 const { SuccessResponse, ErrorResponse } = require('../utils/responses');
 
+// @desc Get original link
+// @type QUERY
+// @access Public
+module.exports.getOriginalLink = asyncHandler(async (_, args, context) => {
+  const link = await Link.findOne({ path: args.path });
 
+  if (!link) {
+    return new ErrorResponse(404, 'link not found');
+  }
+  
+  return link;
+});
 
 // @desc Get links for the logged-in user
 // @type QUERY
