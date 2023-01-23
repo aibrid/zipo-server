@@ -55,7 +55,7 @@ module.exports.generateLink = async () => {
   async function createLink() {
     let link = '';
 
-    while (link.length < 6) {
+    while (link.length < 7) {
       const index = Math.abs(Math.round(Math.random() * sample.length - 1));
 
       link += sample[index];

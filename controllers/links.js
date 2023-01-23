@@ -16,7 +16,7 @@ module.exports.getOriginalLink = asyncHandler(async (_, args, context) => {
   if (!link) {
     return new ErrorResponse(404, 'link not found');
   }
-  
+
   return link;
 });
 
@@ -97,7 +97,7 @@ module.exports.getLinkById = asyncHandler(async (_, args, context) => {
 // @type QUERY
 // @access Private
 module.exports.isCustomizable = asyncHandler(async (_, args, context) => {
-  const link = await Link.findOne({ path: args.text }).select('_id');
+  const link = await Link.findOne({ path: args.path }).select('_id');
 
   if (link) {
     return false;
