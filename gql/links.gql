@@ -5,7 +5,7 @@ extend type Query {
   "Get a link by id - [for logged-in user]"
   link_getById(id: ID!): Link!
   "Check if a link is customizable"
-  link_isCustomizable: Boolean!
+  link_isCustomizable(path: String!): Boolean!
   link_click: Click
 }
 
