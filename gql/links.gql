@@ -23,6 +23,8 @@ extend type Mutation {
     path: String!
     combinedLink: CombinedLinkInput!
   ): LinkResponse!
+  link_shortened_edit(id: ID!, link: String!): LinkResponse!
+  link_combined_edit(id: ID!, combinedLink: CombinedLinkInput!): LinkResponse!
 }
 
 type Click {
