@@ -3,6 +3,7 @@ const sub = require('date-fns/sub');
 const mongoose = require('mongoose');
 const asyncHandler = require('../middleware/async');
 const Link = require('../models/Link');
+const Stat = require('../models/Stat');
 const User = require('../models/User');
 const { generateLink } = require('../utils/misc');
 const { SuccessResponse, ErrorResponse } = require('../utils/responses');
@@ -10,8 +11,28 @@ const { SuccessResponse, ErrorResponse } = require('../utils/responses');
 // @desc Get original link
 // @type QUERY
 // @access Public
-module.exports.getOriginalLink = asyncHandler(async (_, args, context) => {
+module.exports.getOriginalLink = asyncHandler(async (_, args, { clientIp }) => {
   const link = await Link.findOne({ path: args.path });
+
+  if (link) {
+    const stat = await Stat.findOne({ ip: clientIp });
+
+    // If ip is already recoreded
+    if (stat) {
+      // If link has not been accessed by the ip address
+      if (
+        !stat.links.find((linkStat) => linkStat.link === link._id.toString())
+      ) {
+        stat.links.push({ link: link._id.toString(), date: new Date() });
+        stat.save();
+      }
+    } else {
+      Stat.create({
+        ip: clientIp,
+        links: [{ link: link._id.toString(), date: new Date() }],
+      });
+    }
+  }
 
   if (!link) {
     return new ErrorResponse(404, 'link not found');
@@ -24,49 +45,17 @@ module.exports.getOriginalLink = asyncHandler(async (_, args, context) => {
 // @type QUERY
 // @access Private
 module.exports.getLinks = asyncHandler(async (_, args, context) => {
-  const query = {
-    $or: [{ owner: context.user.id }, { invitees: { $in: [context.user.id] } }],
-  };
+  const query = { owner: context.user.id };
 
-  const events = await Event.find(query)
-    .populate('invitees', '_id name email photo')
-    .populate('owner', '_id name email photo');
+  const data = await Link.find(query);
 
-  let data = events.map((event, key) => {
-    const resp = fillEvent(event._doc);
-
-    // This JSON conversion below is done because of mongoose's object model behaviour
-    resp.invitees = JSON.parse(JSON.stringify(resp.invitees));
-    return resp;
+  return data.map((link) => {
+    if (link.type === 'Shortened') {
+      link.combinedLink = undefined;
+    }
+    link.id = link._id;
+    return link;
   });
-
-  // Handle event filter
-  const today = new Date();
-  // Return only events that are occuring today
-  if (args.status === 'Today') {
-    data = data.filter((event) => {
-      console.log(endOfDay(today), endOfDay(event.date));
-      return endOfDay(today).getTime() === endOfDay(event.date).getTime();
-    });
-  }
-
-  // Return only events that are yet to occur
-  if (args.status === 'Upcoming') {
-    data = data.filter((event) => {
-      console.log(endOfDay(today), endOfDay(event.date));
-      return endOfDay(event.date).getTime() > endOfDay(today).getTime();
-    });
-  }
-
-  // Return only events that have passed
-  if (args.status === 'Passed') {
-    data = data.filter((event) => {
-      console.log(endOfDay(today), endOfDay(event.date));
-      return endOfDay(event.date).getTime() < endOfDay(today).getTime();
-    });
-  }
-
-  return data;
 });
 
 // @desc Get a link by id for the logged-in user
@@ -134,6 +123,24 @@ module.exports.shortenCustomLink = asyncHandler(async (_, args, context) => {
     return new ErrorResponse(400, `'${args.path}' is taken`);
   }
   args.type = 'Shortened';
+  args.owner = context.user.id;
+  const link = await Link.create(args);
+
+  return new SuccessResponse(201, true, link);
+});
+
+// @desc Combine a custom link
+// @type MUTATION
+// @access Private
+module.exports.combineCustomLink = asyncHandler(async (_, args, context) => {
+  const pathTaken = await Link.findOne({ path: args.path });
+
+  if (pathTaken) {
+    return new ErrorResponse(400, `'${args.path}' is taken`);
+  }
+  args.type = 'Combined';
+  args.owner = context.user.id;
+
   const link = await Link.create(args);
 
   return new SuccessResponse(201, true, link);

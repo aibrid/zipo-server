@@ -17,7 +17,15 @@ const LinkSchema = new mongoose.Schema({
 
   link: {
     type: String,
-    required: true,
+    required: function () {
+      return this.type === 'Shortened';
+    },
+  },
+
+  combinedLink: {
+    links: [{ title: String, id: String, url: String }],
+    description: String,
+    title: String,
   },
 
   owner: {

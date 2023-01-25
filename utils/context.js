@@ -1,5 +1,6 @@
 const { PubSub } = require('graphql-subscriptions');
 const { getUserInfo } = require('../middleware/auth');
+const requestIp = require('request-ip');
 
 const pubsub = new PubSub();
 
@@ -16,8 +17,8 @@ const contextHandler = async ({ req, res }) => {
     const token = req.cookies.token;
     user = await getUserInfo(token);
   }
-
-  return { user, pubsub, res, req };
+  const clientIp = requestIp.getClientIp(req);
+  return { user, pubsub, res, req, clientIp };
 };
 
 module.exports = contextHandler;

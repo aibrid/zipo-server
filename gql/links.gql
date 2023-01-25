@@ -18,6 +18,11 @@ extend type Mutation {
     alternators: [String!]
     link: String!
   ): LinkResponse!
+  "Combine link"
+  link_combineCustom(
+    path: String!
+    combinedLink: CombinedLinkInput!
+  ): LinkResponse!
 }
 
 type Click {
@@ -30,8 +35,21 @@ type Link {
   path: String!
   alternators: [String]
   type: LINK_TYPE!
-  link: String!
+  link: String
+  combinedLink: CombinedLink
   id: String
+}
+
+type CombinedLink {
+  links: [CombinedLinkOne!]
+  description: String
+  title: String
+}
+
+type CombinedLinkOne {
+  title: String!
+  id: String!
+  url: String!
 }
 
 type LinkResponse {
@@ -42,3 +60,15 @@ type LinkResponse {
 }
 
 # Inputs
+
+input CombinedLinkInput {
+  links: [CombinedLinkOneInput!]!
+  description: String!
+  title: String!
+}
+
+input CombinedLinkOneInput {
+  title: String!
+  id: String!
+  url: String!
+}
