@@ -129,6 +129,47 @@ module.exports.shortenCustomLink = asyncHandler(async (_, args, context) => {
   return new SuccessResponse(201, true, link);
 });
 
+// @desc Edit a shortened link
+// @type MUTATION
+// @access Private
+module.exports.editShortenedLink = asyncHandler(async (_, args, context) => {
+  const link = await Link.findById(args.id);
+
+  if (!link) {
+    return new ErrorResponse(404, 'Link not found');
+  }
+
+  if (link.owner.toString() !== context.user.id.toString()) {
+    return new ErrorResponse(403, 'Unauthorized');
+  }
+
+  link.link = args.link;
+  await link.save();
+
+  return new SuccessResponse(200, true, link);
+});
+
+// @desc Edit a combined link
+// @type MUTATION
+// @access Private
+module.exports.editCombinedLink = asyncHandler(async (_, args, context) => {
+  const link = await Link.findById(args.id);
+
+  if (!link) {
+    return new ErrorResponse(404, 'Link not found');
+  }
+
+  if (link.owner.toString() !== context.user.id.toString()) {
+    return new ErrorResponse(403, 'Unauthorized');
+  }
+
+  console.log(args.combinedLink)
+  link.combinedLink = args.combinedLink;
+  await link.save();
+
+  return new SuccessResponse(200, true, link);
+});
+
 // @desc Combine a custom link
 // @type MUTATION
 // @access Private

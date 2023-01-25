@@ -3,7 +3,9 @@ const {
   isCustomizable,
   shortenLink,
   shortenCustomLink,
+  editShortenedLink,
   combineCustomLink,
+  editCombinedLink,
   getOriginalLink,
   getLinks,
 } = require('../controllers/links');
@@ -18,6 +20,8 @@ module.exports = {
   Mutation: {
     link_shorten: combineResolvers(shortenLink),
     link_shortenCustom: combineResolvers(protect, shortenCustomLink),
+    link_shortened_edit: combineResolvers(protect, editShortenedLink),
+    link_combined_edit: combineResolvers(protect, editCombinedLink),
     link_combineCustom: combineResolvers(protect, combineCustomLink),
   },
 };
