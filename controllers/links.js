@@ -19,17 +19,23 @@ module.exports.getOriginalLink = asyncHandler(async (_, args, { clientIp }) => {
 
     // If ip is already recoreded
     if (stat) {
-      // If link has not been accessed by the ip address
+      // If link has not been accessed by the ip address, save the link and increase the link click count for the ip
       if (
         !stat.links.find((linkStat) => linkStat.link === link._id.toString())
       ) {
         stat.links.push({ link: link._id.toString(), date: new Date() });
+        stat.clicks = stat.clicks + 1;
+        stat.save();
+      } else {
+        // If link has been accessed by the ip address, increase the link click count for the ip only
+        stat.clicks = stat.clicks + 1;
         stat.save();
       }
     } else {
       Stat.create({
         ip: clientIp,
         links: [{ link: link._id.toString(), date: new Date() }],
+        clicks: 1,
       });
     }
   }
@@ -163,7 +169,7 @@ module.exports.editCombinedLink = asyncHandler(async (_, args, context) => {
     return new ErrorResponse(403, 'Unauthorized');
   }
 
-  console.log(args.combinedLink)
+  console.log(args.combinedLink);
   link.combinedLink = args.combinedLink;
   await link.save();
 

@@ -8,6 +8,8 @@ const StatSchema = new mongoose.Schema({
 
   links: [{ link: String, date: Date, _id: false }],
 
+  clicks: { type: Number, default: 0 },
+
   id: String,
 });
 
