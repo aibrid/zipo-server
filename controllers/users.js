@@ -124,6 +124,7 @@ module.exports.register = asyncHandler(async (_, args) => {
 
     await sendEmail(params);
   } catch (error) {
+    console.log(error)
     // return new ErrorResponse(
     //   500,
     //   'Please check that your email is correct and try again.'
