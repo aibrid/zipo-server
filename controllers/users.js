@@ -140,6 +140,7 @@ module.exports.login = asyncHandler(async (_, args) => {
   // Check db for user
   const user = await User.findOne({
     email: args.email,
+    isEmailVerified: true
   }).select('+password');
 
   if (!user) {
