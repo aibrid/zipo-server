@@ -8,6 +8,97 @@ const User = require('../models/User');
 const { generateLink } = require('../utils/misc');
 const { SuccessResponse, ErrorResponse } = require('../utils/responses');
 
+function getAlternatePaths(url) {
+  const alternators = [];
+
+  // Facebook usecase
+  if (url.match('facebook.com')) {
+    alternators.push('facebook');
+  }
+
+  // Twitter usecase
+  if (url.match('twitter.com')) {
+    alternators.push('twitter');
+  }
+
+  // Youtube usecase
+  if (url.match('youtube.com')) {
+    alternators.push('youtube');
+  }
+
+  // Figma usecase
+  if (url.match('figma.com')) {
+    alternators.push('figma');
+  }
+
+  // Instagram usecase
+  if (url.match('instagram.com')) {
+    alternators.push('instagram');
+  }
+
+  // Tiktok usecase
+  if (url.match('tiktok.com')) {
+    alternators.push('tiktok');
+  }
+
+  // Jumia usecase
+  if (url.match('jumia.com')) {
+    alternators.push('jumia');
+  }
+
+  // Konga usecase
+  if (url.match('konga.com')) {
+    alternators.push('konga');
+  }
+
+  // Alibaba usecase
+  if (url.match('alibaba.com')) {
+    alternators.push('Alibaba');
+  }
+
+  // Aliexpress usecase
+  if (url.match('aliexpress.com')) {
+    alternators.push('aliexpress');
+  }
+
+  // Aws usecase
+  if (url.match('aws.amazon.com')) {
+    alternators.push('aws');
+  }
+
+  // Amazon usecase
+  if (url.match('amazon.com')) {
+    alternators.push('amazon');
+  }
+
+  // Pinterest usecase
+  if (url.match('pinterest.com')) {
+    alternators.push('pinterest');
+  }
+
+  // Snapchat usecase
+  if (url.match('snapchat.com')) {
+    alternators.push('snapchat');
+  }
+
+  // Linkedin usecase
+  if (url.match('linkedin.com')) {
+    alternators.push('linkedin');
+  }
+
+  // Vimeo usecase
+  if (url.match('vimeo.com')) {
+    alternators.push('vimeo');
+  }
+
+  // Github usecase
+  if (url.match('github.com')) {
+    alternators.push('github');
+  }
+
+  return alternators;
+}
+
 // @desc Get original link
 // @type QUERY
 // @access Public
@@ -112,6 +203,7 @@ module.exports.shortenLink = asyncHandler(async (_, args, context) => {
   }
 
   args.path = await generateLink();
+  args.alternators = getAlternatePaths(args.link);
 
   args.type = 'Shortened';
   const link = await Link.create(args);
