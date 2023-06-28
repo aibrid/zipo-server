@@ -6,8 +6,8 @@ const { getS3SignedUrl } = require('./utils/fileUploads');
 
 const app = express();
 
-let origin = ['https://zipo.me'];
-if (process.env.TEST_ENV === 'true') {
+let origin = ['https://zipo.me', 'http://localhost:3000'];
+if (process.env.TEST_ENV === 'yes') {
   origin.push('http://localhost:3000', 'http://localhost:5000', 'https://studio.apollographql.com');
 }
 
@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(
   helmet({
     contentSecurityPolicy:
-      process.env.NODE_ENV === 'production' && process.env.TEST_ENV === 'false'
+      process.env.NODE_ENV === 'production' && process.env.TEST_ENV === 'yes'
         ? true
         : false,
   })

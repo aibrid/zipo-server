@@ -47,8 +47,8 @@ async function startApolloServer() {
 
   await server.start();
 
-  let origin = ['https://zipo.me'];
-  if (process.env.TEST_ENV === 'true') {
+  let origin = ['https://zipo.me', 'http://localhost:3000'];
+  if (process.env.TEST_ENV === 'yes') {
     origin.push(
       'http://localhost:3000',
       'http://localhost:5000',
